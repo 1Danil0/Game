@@ -13,19 +13,23 @@ import java.util.List;
 @org.springframework.stereotype.Service
 public class Service {
     private final DAO dao;
-    boolean playerIsExist = false;
     @Autowired
     public Service(DAO dao) {
         this.dao = dao;
     }
-    public boolean createCreature(CreatureDTO creature){
-        if(!playerIsExist){
-            dao.createPlayer(creature);
-            playerIsExist = true;
-            return playerIsExist;
+    public void createCreature(CreatureDTO creature){
+        if(dao.findPlayer() == null){
+            Player player = new Player(creature.getHealth(), creature.getMinDamage(),
+                    creature.getMaxDamage(), creature.getResistance(), true);
+            dao.savePlayer(player);
+            return;
         }
-        dao.createMonster(creature);
-        return playerIsExist;
+        Monster monster = new Monster(creature.getHealth(), creature.getMinDamage(),
+                creature.getMaxDamage(), creature.getResistance(), true);
+        dao.saveMonster(monster);
+    }
+    public void deleteCreatures(){
+        dao.deleteCreatures();
     }
     public List<Monster> findMonsters(){
         return dao.findMonsters();

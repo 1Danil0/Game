@@ -11,9 +11,9 @@ public abstract class Creature {
     private boolean isAlive;
 
     public Creature(int health, int minDamage, int maxDamage, int resistance){
-        if(minDamage <= 0 || minDamage > 30 || maxDamage > 30 || maxDamage <= 0 || minDamage > maxDamage){
-            throw new IllegalStateException("damage should be from N to M");
-        }
+//        if(minDamage <= 0 || minDamage > 30 || maxDamage > 30 || maxDamage <= 0 || minDamage > maxDamage){
+//            throw new IllegalStateException("damage should be from N to M");
+//        }
         this.health = health;
         this.minDamage = minDamage;
         this.maxDamage = maxDamage;
@@ -40,6 +40,18 @@ public abstract class Creature {
             }
         }
         return isHitSuccessful;
+    }
+
+    @Override
+    public String toString() {
+        return "Creature{" +
+                "minDamage=" + minDamage +
+                ", maxDamage=" + maxDamage +
+                ", resistance=" + resistance +
+                ", health=" + health +
+                ", currentHealth=" + currentHealth +
+                ", isAlive=" + isAlive +
+                '}';
     }
 
     public int getMinDamage() {

@@ -16,18 +16,18 @@ public class DAO {
     private Player player;
     private List<Monster> monsters;
 
-    public Creature createPlayer(CreatureDTO creature){
-        player = new Player(creature.getHealth(), creature.getMinDamage()
-                , creature.getMaxDamage(), creature.getResistance());
-        return player;
+    public void savePlayer(Player player){
+        this.player = player;
     }
-    public void createMonster(CreatureDTO creature){
+    public void saveMonster(Monster monster){
         if(monsters == null){
             monsters = new ArrayList<>();
         }
-        monsters.add(new Monster(creature.getHealth(), creature.getMinDamage()
-                , creature.getMaxDamage(), creature.getResistance()));
-        //return monsters;
+        monsters.add(monster);
+    }
+    public void deleteCreatures(){
+        player = null;
+        monsters = null;
     }
     public List<Monster> findMonsters(){
         return monsters;

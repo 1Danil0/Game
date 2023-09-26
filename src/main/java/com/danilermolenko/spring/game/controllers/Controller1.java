@@ -17,11 +17,6 @@ public class Controller1 {
         this.service = service;
     }
 
-    @GetMapping("/123")
-    public String hello(){
-        return "page";
-    }
-
     @GetMapping("/")
     public String game(){
         return "first-page";
@@ -35,20 +30,24 @@ public class Controller1 {
             model.addAttribute("text", "Enter details of your hero");
         }
         model.addAttribute("player", service.findPlayer());
-        return "create-page";
-    }
-    @PostMapping("/count")
-    public String monster(Model model){
-        model.addAttribute("text", "Enter details of Monster");
+        model.addAttribute("monsters", service.findMonsters());
         return "create-page";
     }
     @PostMapping("/create")
-    public String save(CreatureDTO creature, @RequestParam("count") int count){
+    public String save(CreatureDTO creature, Model model){
+        System.out.println(creature);
+        if(creature.getMaxDamage() < creature.getMinDamage()){
+            if(service.findPlayer() != null){
+                model.addAttribute("text", "Enter details of Monster");
+            } else {
+                model.addAttribute("text", "Enter details of your hero");
+            }
+            model.addAttribute("error", "maxDamage must be greater than minDamage");
+            return "create-page";
+        }
         service.createCreature(creature);
-        do{
-            count--;
-            return "redirect:create";
-        } while (count > 0);
+        return "redirect:create";
+
     }
     @GetMapping("/battling")
     public String battle(Model model){
@@ -59,11 +58,16 @@ public class Controller1 {
     @PostMapping("/hit/{id}")
     public String hit(@PathVariable("id") int id){
         service.hit(id);
-        return "redirect:battling";
+        return "redirect:/game/battling";
     }
-    @PostMapping("/cure")
+    @GetMapping("/cure")
     public String cure(){
         service.findPlayer().cure();
         return "redirect:battling";
+    }
+    @GetMapping("/repeat")
+    public String repeat(){
+        service.deleteCreatures();
+        return "redirect:create";
     }
 }
